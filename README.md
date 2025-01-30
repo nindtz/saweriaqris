@@ -23,4 +23,10 @@ qrcode = myqr[0]
 # just feed the qrcode to your favourite qr code generator
 ```
 
+## Example use case:
+Discord bot Donate QRIS<br>
+<img width="401" alt="image" src="https://github.com/user-attachments/assets/f607cc45-5836-4c19-abe2-b2b1f8393d1b" />
+
+
+
 #### Thank you
