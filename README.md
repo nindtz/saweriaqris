@@ -1,6 +1,6 @@
 ## Saweria QRIS code generator
 [![Discord](https://img.shields.io/discord/878859506405228574)](https://discord.gg/GzjyMZnpb7)
-![GitHub License](https://img.shields.io/github/license/nindtz/saweriaqris)
+[![GitHub License](https://img.shields.io/github/license/nindtz/saweriaqris)](https://mit-license.org/)
 
 
 
