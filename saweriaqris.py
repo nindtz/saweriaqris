@@ -66,9 +66,9 @@ def create_payment_string(saweria_username, amount, author, email, pesan):
         "invoice_url": f"https://saweria.co/qris/{pc['id']}",
         "qr_string": pc["qr_string"],
         "created_at": pc["created_at"],
-        "total_dibayar": pc["amount_raw"],
+        "amount_raw": pc["amount_raw"],
         "saweria_username": saweria_username,
-        "saweria_apikey": user_id
+        "user_id": user_id
     }
 
 def create_payment_qr(saweria_username, amount, author, email, pesan):
