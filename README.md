@@ -1,4 +1,9 @@
 ## Saweria QRIS code generator
+![Discord](https://img.shields.io/discord/878859506405228574)
+![GitHub License](https://img.shields.io/github/license/nindtz/saweriaqris)
+
+
+
 
 ### DISCLAIMER
 
