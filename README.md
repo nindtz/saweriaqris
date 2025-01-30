@@ -13,7 +13,6 @@
 
 use this within your code
 example below:
-####Python
 
 ```python
 from saweriaqris import create_payment_qr
