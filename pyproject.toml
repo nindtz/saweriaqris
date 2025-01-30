@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "saweriaqris"
-version = "0.1.2"
+version = "0.1.3"
 description = "Saweria QRIS code generator"
 authors = [
     { name = "nindtz", email = "nindita@gmail.com" }
@@ -21,3 +21,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent"
 ]
+
+[project.urls]
+"Source Code" = "http://github.com/nindtz/saweriaqris"
+"Funding" = "https://saweria.co/nindtz"
