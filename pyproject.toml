@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saweriaqris"
+version = "0.1.0"
+description = "Saweria QRIS code generator"
+authors = [
+    { name = "nindtz", email = "nindita@gmail.com" }
+]
+dependencies = [
+    "beautifulsoup4",
+    "requests"
+]
+readme = "README.md"  # Ensure this file exists in your project root
+license = { text = "MIT" }  # Adjust if you’re using a different license
+keywords = ["qris", "saweria", "payments"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
