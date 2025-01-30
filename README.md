@@ -1,12 +1,12 @@
 ## Saweria QRIS code generator
 
-###DISCLAIMER
+### DISCLAIMER
 
 **use at your own risk**
 
-###Requirements
+### Requirements
 
-`$ pip install bs4` Install BeautifulSoup
+`$ pip install bs4` Install BeautifulSoup <br>
 `$ pip install requests` Install requests
 
 ## Usage:
@@ -24,4 +24,4 @@ qrcode = myqr[0]
 # just feed the qrcode to your favourite qr code generator
 ```
 
-###Thank you
+#### Thank you
