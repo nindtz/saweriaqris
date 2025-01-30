@@ -7,10 +7,9 @@
 
 **use at your own risk**
 
-### Requirements
+### Installation
 
-`$ pip install beautifulsoup4` Install BeautifulSoup <br>
-`$ pip install requests` Install requests
+`$ pip install saweriaqris` Install this package <br>
 
 ## Usage:
 
