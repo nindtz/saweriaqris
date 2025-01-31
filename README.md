@@ -1,12 +1,13 @@
 ## Saweria QRIS code generator
 
 [![PyPI - Version](https://img.shields.io/pypi/v/saweriaqris)](http://pypi.org/project/saweriaqris/)
+[![PyPI Downloads](https://static.pepy.tech/badge/saweriaqris)](https://pepy.tech/projects/saweriaqris)
 [![Discord](https://img.shields.io/discord/878859506405228574)](https://discord.gg/GzjyMZnpb7)
 [![GitHub License](https://img.shields.io/github/license/nindtz/saweriaqris)](https://mit-license.org/)
 
-### DISCLAIMER
+> [!CAUTION]
+> Using any kind of automation programs on your account can result in your account getting permanently banned by Saweria. Use at your own risk
 
-**use at your own risk**
 
 ### Installation
 
