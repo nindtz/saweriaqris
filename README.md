@@ -6,8 +6,7 @@
 [![GitHub License](https://img.shields.io/github/license/nindtz/saweriaqris)](https://mit-license.org/)
 
 > [!CAUTION]
-> Using any kind of automation programs on your account can result in your account getting permanently banned by Saweria. Use at your own risk
-
+> Using any kind of automation programs on your account can result in your account getting permanently banned by Saweria. Use at your own risk.
 
 ### Installation
 
@@ -16,10 +15,12 @@
 ## Usage:
 
 use this within your code
-example below:
+example below
+
+creating a code
 
 ```python
-from saweriaqris import create_payment_qr
+from saweriaqris import create_payment_qr, paid_status
 
 myqr = create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "Semangat!")
 qrcode = myqr[0]
@@ -27,6 +28,16 @@ transaction_id = myqr[1]
 
 # Just feed the qrcode to your favourite qr code generator
 # transaction_id for matching purpose to your webhook calls
+```
+
+checking transaction status
+
+```python
+from saweriaqris import create_payment_qr, paid_status
+
+is_paid = paid_status(transaction_id)
+
+# is_paid is bool value
 ```
 
 ## Example use case:

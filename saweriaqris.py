@@ -9,10 +9,37 @@ import json
 BACKEND = 'https://backend.saweria.co'
 FRONTEND = 'https://saweria.co'
 
+headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'
+        }
 
 
 def insert_plus_in_email(email, insert_str):
     return email.replace("@", f"+{insert_str}@", 1)
+
+
+def paid_status(transaction_id: str) -> bool:
+    """
+    Check status of a saweria transaction paid or not from transaction_id.
+
+    Args:
+        transaction_id (str): String from output of create_payment
+
+    Returns:
+        bool: Returns true if paid anything else is False
+    """
+
+    resp = requests.get(f"{BACKEND}/donations/qris/{transaction_id}", headers=headers)
+    
+    if not resp.status_code // 100 == 2:
+        raise ValueError("Transaction ID is not found!")
+    else:
+        data = resp.json()["data"]
+        if data["qr_string"] != "":
+            return False
+        else:
+            return True
+    
 
 
 def create_payment_string(saweria_username: str, amount: int, sender: str, email: str, pesan:str) -> dict:
@@ -37,9 +64,7 @@ def create_payment_string(saweria_username: str, amount: int, sender: str, email
     
     print(f"Loading {FRONTEND}/{saweria_username}")
     
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'
-    }
+
     response = requests.get(f"{FRONTEND}/{saweria_username}", headers=headers)
     soup = BeautifulSoup(response.text, "html.parser")
     
@@ -101,5 +126,6 @@ def create_payment_qr(saweria_username: str, amount: int, sender: str, email: st
     payment_details = create_payment_string(saweria_username, amount, sender, email, pesan)  
     return [payment_details["qr_string"], payment_details["trx_id"]]
 
-# print(create_payment_string("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))
+# print(create_payment_string("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya")) 
 # print(create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))
+# print(paid_status("00000000-0000-0000-0000-000000000000")) # output True if paid, False if not paid and Error if anything else
