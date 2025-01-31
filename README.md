@@ -18,7 +18,6 @@ use this within your code
 example below
 
 creating a code
-
 ```python
 from saweriaqris import create_payment_qr, paid_status
 
@@ -31,7 +30,6 @@ transaction_id = myqr[1]
 ```
 
 checking transaction status
-
 ```python
 from saweriaqris import create_payment_qr, paid_status
 
