@@ -28,9 +28,7 @@ def paid_status(transaction_id: str) -> bool:
     Returns:
         bool: Returns true if paid anything else is False
     """
-
-    resp = requests.get(f"{BACKEND}/donations/qris/{transaction_id}", headers=headers)
-    
+    resp = requests.get(f"{BACKEND}/donations/qris/{transaction_id}", headers=headers)    
     if not resp.status_code // 100 == 2:
         raise ValueError("Transaction ID is not found!")
     else:
@@ -40,7 +38,6 @@ def paid_status(transaction_id: str) -> bool:
         else:
             return True
     
-
 
 def create_payment_string(saweria_username: str, amount: int, sender: str, email: str, pesan:str) -> dict:
     """
@@ -64,7 +61,6 @@ def create_payment_string(saweria_username: str, amount: int, sender: str, email
     
     print(f"Loading {FRONTEND}/{saweria_username}")
     
-
     response = requests.get(f"{FRONTEND}/{saweria_username}", headers=headers)
     soup = BeautifulSoup(response.text, "html.parser")
     
@@ -95,18 +91,7 @@ def create_payment_string(saweria_username: str, amount: int, sender: str, email
     }
     ps = requests.post(f"{BACKEND}/donations/{user_id}", json=payload)
     pc = ps.json()["data"]
-    
-    return {
-        "trx_id": pc["id"],
-        "message": pesan,
-        "amount": amount,
-        "invoice_url": f"https://saweria.co/qris/{pc['id']}",
-        "qr_string": pc["qr_string"],
-        "created_at": pc["created_at"],
-        "amount_raw": pc["amount_raw"],
-        "saweria_username": saweria_username,
-        "user_id": user_id
-    }
+    return pc
 
 
 def create_payment_qr(saweria_username: str, amount: int, sender: str, email: str, pesan: str) -> list[str]:
@@ -124,7 +109,7 @@ def create_payment_qr(saweria_username: str, amount: int, sender: str, email: st
         list[str]: A list containing the QRIS payment string and the transaction ID.
     """
     payment_details = create_payment_string(saweria_username, amount, sender, email, pesan)  
-    return [payment_details["qr_string"], payment_details["trx_id"]]
+    return [payment_details["qr_string"], payment_details["id"]]
 
 # print(create_payment_string("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya")) 
 # print(create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))

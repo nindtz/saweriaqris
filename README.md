@@ -18,6 +18,7 @@ use this within your code
 example below
 
 creating a code
+
 ```python
 from saweriaqris import create_payment_qr, paid_status
 
@@ -30,6 +31,7 @@ transaction_id = myqr[1]
 ```
 
 checking transaction status
+
 ```python
 from saweriaqris import create_payment_qr, paid_status
 
@@ -37,6 +39,37 @@ is_paid = paid_status(transaction_id)
 
 # is_paid is bool value
 ```
+
+<br>
+
+> [!Tip]
+> Best Practice: You are supposed to use Saweria's Webhook Integration to get realtime payment notification to your API.
+
+1. Set your Saweria Integration to point to your API (found in Integrations -> Webhook)
+2. You issue a payment code to your client.
+3. After successful payment, Saweria will do POST request (Webhook) to your API.
+   Below example POST from Saweria Webhook:
+
+```json
+{
+	"version": "2022.01",
+	"created_at": "2021-01-01T12:00:00+00:00",
+	"id": "00000000-0000-0000-0000-000000000000",
+	"type": "donation",
+	"amount_raw": 69420,
+	"cut": 3471,
+	"donator_name": "Someguy",
+	"donator_email": "someguy@example.com",
+	"donator_is_user": false,
+	"message": "THIS IS A FAKE MESSAGE! HAVE A GOOD ONE",
+	"etc": {
+		"amount_to_display": 69420
+	}
+}
+```
+
+4. Parse the JSON from the POST and challenge the id given from Saweria Webhook with the paid_status function.
+5. Only after it returns True, then you can update accordingly.
 
 ## Example use case:
 
