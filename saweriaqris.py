@@ -94,7 +94,7 @@ def create_payment_string(saweria_username: str, amount: int, sender: str, email
     return pc
 
 
-def create_payment_qr(saweria_username: str, amount: int, sender: str, email: str, pesan: str) -> list[str]:
+def create_payment_qr(saweria_username: str, amount: int, sender: str, email: str, pesan: str) -> list:
     """
     Generates a QRIS payment string and a transaction ID.
 
