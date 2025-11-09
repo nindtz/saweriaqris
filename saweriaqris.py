@@ -117,6 +117,6 @@ def create_payment_qr(saweria_username: str, amount: int, sender: str, email: st
     payment_details = create_payment_string(saweria_username, amount, sender, email, pesan)  
     return [payment_details["qr_string"], payment_details["id"]]
 
-print(create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))
+# print(create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))
 # print(paid_status("00000000-0000-0000-0000-000000000000")) # output True if paid, False if not paid and Error if anything else
 
