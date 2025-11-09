@@ -11,7 +11,7 @@ authors = [
 ]
 dependencies = [
     "beautifulsoup4",
-    "requests"
+    "httpx"
 ]
 readme = "README.md"  # Ensure this file exists in your project root
 license = { text = "MIT" }  # Adjust if you’re using a different license
