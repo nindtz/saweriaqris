@@ -1,6 +1,6 @@
-import requests
 from bs4 import BeautifulSoup
 import json
+import httpx
 
 # Created from Playwright to BS4
 # nindtz 2024
@@ -18,28 +18,29 @@ def insert_plus_in_email(email, insert_str):
     return email.replace("@", f"+{insert_str}@", 1)
 
 
+import httpx
+
 def paid_status(transaction_id: str) -> bool:
     """
-    Check status of a saweria transaction paid or not from transaction_id.
+    Check if a Saweria transaction is paid or not from transaction_id.
 
     Args:
         transaction_id (str): String from output of create_payment
 
     Returns:
-        bool: Returns true if paid anything else is False
+        bool: True if paid, False if not paid.
     """
-    resp = requests.get(f"{BACKEND}/donations/qris/{transaction_id}", headers=headers)    
-    if not resp.status_code // 100 == 2:
-        raise ValueError("Transaction ID is not found!")
-    else:
-        data = resp.json()["data"]
-        if data["qr_string"] != "":
-            return False
-        else:
-            return True
-    
+    with httpx.Client(http2=True, headers=headers, timeout=1) as client:
+        resp = client.get(f"{BACKEND}/donations/qris/{transaction_id}")
+        if resp.status_code // 100 != 2:
+            raise ValueError("Transaction ID is not found!")
 
-def create_payment_string(saweria_username: str, amount: int, sender: str, email: str, pesan:str) -> dict:
+        data = resp.json().get("data", {})
+        # If qr_string still exists, payment is pending/unpaid
+        return data.get("qr_string", "") == ""
+
+
+def create_payment_string(saweria_username, amount, sender, email, pesan):
     """
     Outputs a details transaction from variables.
 
@@ -53,46 +54,51 @@ def create_payment_string(saweria_username: str, amount: int, sender: str, email
     Returns:
         dict: Transaction details from input variables.
     """
-    if not saweria_username or not amount or not sender or not email or not pesan:
+    if not all([saweria_username, amount, sender, email, pesan]):
         raise ValueError("Parameter is missing!")
     if amount < 10000:
-        # 10000 is needed so you can have webhook post request
         raise ValueError("Minimum amount is 10000")
-    
-    print(f"Loading {FRONTEND}/{saweria_username}")
-    
-    response = requests.get(f"{FRONTEND}/{saweria_username}", headers=headers)
-    soup = BeautifulSoup(response.text, "html.parser")
-    
-    next_data_script = soup.find(id='__NEXT_DATA__')
-    if not next_data_script:
-        print("Saweria account not found")
-        raise ValueError("Saweria account not found")
-    
-    next_data = json.loads(next_data_script.text)
-    user_id = next_data.get("props", {}).get("pageProps", {}).get("data", {}).get("id")
-    if not user_id:
-        print("Saweria account not found")
-        raise ValueError("Saweria account not found")
-    
-    payload = {
-        "agree": True,
-        "notUnderage": True,
-        "message": pesan,
-        "amount": int(amount),
-        "payment_type": "qris",
-        "vote": "",
-        "currency": "IDR",
-        "customer_info": {
-            "first_name": sender,
-            "email": insert_plus_in_email(email, sender),
-            "phone": ""
-        }
-    }
-    ps = requests.post(f"{BACKEND}/donations/{user_id}", json=payload)
-    pc = ps.json()["data"]
-    return pc
 
+    print(f"Loading {FRONTEND}/{saweria_username}")
+
+    # httpx session (faster & supports HTTP/2)
+    with httpx.Client(http2=True, headers=headers, timeout=1) as client:
+        resp = client.get(f"{FRONTEND}/{saweria_username}")
+        soup = BeautifulSoup(resp.text, "html.parser")
+
+        next_data_script = soup.find(id="__NEXT_DATA__")
+        if not next_data_script:
+            raise ValueError("Saweria account not found")
+
+        next_data = json.loads(next_data_script.text)
+        user_id = (
+            next_data.get("props", {})
+            .get("pageProps", {})
+            .get("data", {})
+            .get("id")
+        )
+
+        if not user_id:
+            raise ValueError("Saweria account not found")
+
+        payload = {
+            "agree": True,
+            "notUnderage": True,
+            "message": pesan,
+            "amount": int(amount),
+            "payment_type": "qris",
+            "vote": "",
+            "currency": "IDR",
+            "customer_info": {
+                "first_name": sender,
+                "email": email,
+                "phone": ""
+            }
+        }
+
+        ps = client.post(f"{BACKEND}/donations/{user_id}", json=payload)
+        ps.raise_for_status()
+        return ps.json()["data"]
 
 def create_payment_qr(saweria_username: str, amount: int, sender: str, email: str, pesan: str) -> list:
     """
@@ -111,6 +117,6 @@ def create_payment_qr(saweria_username: str, amount: int, sender: str, email: st
     payment_details = create_payment_string(saweria_username, amount, sender, email, pesan)  
     return [payment_details["qr_string"], payment_details["id"]]
 
-# print(create_payment_string("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya")) 
-# print(create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))
+print(create_payment_qr("nindtz", 10000, "Budi", "budi@saweria.co", "coba ya"))
 # print(paid_status("00000000-0000-0000-0000-000000000000")) # output True if paid, False if not paid and Error if anything else
+
