@@ -30,7 +30,7 @@ def paid_status(transaction_id: str) -> bool:
     Returns:
         bool: True if paid, False if not paid.
     """
-    with httpx.Client(http2=True, headers=headers, timeout=1) as client:
+    with httpx.Client(http2=True, headers=headers, timeout=2) as client:
         resp = client.get(f"{BACKEND}/donations/qris/{transaction_id}")
         if resp.status_code // 100 != 2:
             raise ValueError("Transaction ID is not found!")
@@ -62,7 +62,7 @@ def create_payment_string(saweria_username, amount, sender, email, pesan):
     print(f"Loading {FRONTEND}/{saweria_username}")
 
     # httpx session (faster & supports HTTP/2)
-    with httpx.Client(http2=True, headers=headers, timeout=1) as client:
+    with httpx.Client(http2=True, headers=headers, timeout=2) as client:
         resp = client.get(f"{FRONTEND}/{saweria_username}")
         soup = BeautifulSoup(resp.text, "html.parser")
 
